@@ -1,10 +1,7 @@
 package com.example.CRUD.entity;
 
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class UserInfo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long Id ;
 
     private String name  ;
@@ -25,6 +23,7 @@ public class UserInfo {
     private VerficationStatus verificationStatus ;
 
     @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
     User user  ;
 
 

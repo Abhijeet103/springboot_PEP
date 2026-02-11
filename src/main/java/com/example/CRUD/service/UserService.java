@@ -60,14 +60,14 @@ public class UserService {
 
         return userDto;
     }
-    public User createUser(UserDto userDto) {
+    public UserResponseDto createUser(UserDto userDto) {
 
 
         User user   = toEntity(userDto) ;
         userRepository.save(user);
         userInfoRepository.save(user.getUserInfo());
 
-        return user;
+        return toResponseDto(user);
 
     }
 
@@ -81,28 +81,56 @@ public class UserService {
         return response;
     }
 
-    public User getuser(long id){
-        User  user = userRepository.findById(id).get();
-        return user;
+    public UserResponseDto getuser(long id){
+        User  user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return toResponseDto(user);
+
     }
 
 
-    public User updateUser(User user) {
-        long id = user.getId(); ;
-        User  oldUser = userRepository.findById(id).get();
-        oldUser.setUsername(user.getUsername());
-        oldUser.setPassword(user.getPassword());
-        oldUser.setEmail(user.getEmail());
+    public UserResponseDto updateUserPartial(UserDto userDto) {
 
-        userRepository.save(oldUser);
-        return user;
+        User user = userRepository.findById(userDto.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserInfo userInfo = user.getUserInfo();
+
+        if (userDto.getUsername() != null) {
+            user.setUsername(userDto.getUsername());
+        }
+
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+
+        if (userDto.getPassword() != null) {
+            user.setPassword(userDto.getPassword());
+        }
+
+        if (userDto.getName() != null) {
+            userInfo.setName(userDto.getName());
+        }
+
+        if (userDto.getPhone() != null) {
+            userInfo.setPhone(userDto.getPhone());
+        }
+
+        if (userDto.getProfilePic() != null) {
+            userInfo.setProfilePic(userDto.getProfilePic());
+        }
+
+        userRepository.save(user);
+        userInfoRepository.save(userInfo);
+
+        return toResponseDto(user);
     }
 
 
-    public User deleteUser(long id) {
-        User  user = userRepository.findById(id).get();
+
+    public UserResponseDto deleteUser(long id) {
+        User  user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         userRepository.delete(user);
-        return user;
+        return toResponseDto(user);
     }
 
 
