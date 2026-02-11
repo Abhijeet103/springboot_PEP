@@ -1,6 +1,8 @@
-package com.example.CRUD;
+package com.example.CRUD.service;
 
 
+import com.example.CRUD.repository.UserRepository;
+import com.example.CRUD.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,24 +15,24 @@ public class UserService {
     UserRepository userRepository;
 
 
-    User createUser(User user) {
+    public User createUser(User user) {
         userRepository.save(user);
         return user;
     }
 
-    List<User> getUsers() {
+    public List<User> getUsers() {
 
         List<User> users  = userRepository.findAll();
         return users;
     }
 
-    User getuser(long id){
+    public User getuser(long id){
         User  user = userRepository.findById(id).get();
         return user;
     }
 
 
-    User updateUser(User user) {
+    public User updateUser(User user) {
         long id = user.getId(); ;
         User  oldUser = userRepository.findById(id).get();
         oldUser.setUsername(user.getUsername());
@@ -42,7 +44,7 @@ public class UserService {
     }
 
 
-    User deleteUser(long id) {
+    public User deleteUser(long id) {
         User  user = userRepository.findById(id).get();
         userRepository.delete(user);
         return user;

@@ -1,4 +1,4 @@
-package com.example.CRUD;
+package com.example.CRUD.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,5 +27,7 @@ public class User {
     @Column(nullable = false , unique = true)
     private String email;
 
+    @OneToOne
+    UserInfo userInfo  ;
 
 }
