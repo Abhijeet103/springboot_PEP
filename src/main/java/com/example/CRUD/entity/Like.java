@@ -2,39 +2,37 @@ package com.example.CRUD.entity;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Post {
+@AllArgsConstructor
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id ;
-    private String content;
-    private String mediaUrl ;
-    private LocalDateTime createdAt ;
+    long id ;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user ;
+    User user  ;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    List<Like> likes  = new ArrayList<>() ;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    Post post ;
 
+    LocalDateTime createdAt ;
 
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
-
-
 }
