@@ -14,4 +14,5 @@ public class PostResponseDto {
     private String mediaUrl ;
     private LocalDateTime createdAt ;
     private String username ;
+
 }
