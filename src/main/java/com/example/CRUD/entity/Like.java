@@ -14,6 +14,11 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "post_id"})
+        }
+)
 public class Like {
 
     @Id
