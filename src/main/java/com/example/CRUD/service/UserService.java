@@ -10,6 +10,7 @@ import com.example.CRUD.repository.TokenRepository;
 import com.example.CRUD.repository.UserInfoRepository;
 import com.example.CRUD.repository.UserRepository;
 import com.example.CRUD.entity.User;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,9 @@ public class UserService {
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private EmailService emailService;
 
 
 
@@ -69,18 +73,21 @@ public class UserService {
 
         return userDto;
     }
-    public UserResponseDto createUser(UserDto userDto) {
+
+    public UserResponseDto createUser(UserDto userDto) throws MessagingException {
 
 
         User user   = toEntity(userDto) ;
+
         user.getUserInfo().setVerificationStatus(VerficationStatus.ONGOING);
+
         Token token = new Token();
         token.setUser(user);
         UUID uuid = UUID.randomUUID();
         token.setToken(uuid.toString());
 
 
-        // send url in email ;
+        sendVerificationEmail(user, uuid.toString());
 
 
         userRepository.save(user);
@@ -152,6 +159,36 @@ public class UserService {
         userRepository.delete(user);
         return toResponseDto(user);
     }
+
+
+    public void sendVerificationEmail(User user , String token)
+            throws MessagingException {
+
+        String verificationUrl =
+                "http://localhost:8080/api/auth/verify?token=" + token;
+
+        String htmlContent = """
+            <html>
+                <body>
+                    <h2>Email Verification</h2>
+                    <p>Please click the button below to verify your account:</p>
+                    <a href="%s"
+                       style="padding:10px 20px;
+                              background-color:#4CAF50;
+                              color:white;
+                              text-decoration:none;
+                              border-radius:5px;">
+                       Verify Account
+                    </a>
+                </body>
+            </html>
+            """.formatted(verificationUrl);
+
+        String email = user.getEmail() ;
+
+        emailService.sendHtmlMail(email, "Verify Your Account", htmlContent);
+    }
+
 
 
 

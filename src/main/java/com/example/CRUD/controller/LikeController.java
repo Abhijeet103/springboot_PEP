@@ -16,11 +16,6 @@ public class LikeController {
     @Autowired
     private LikeService likeService;
 
-    /**
-     * Toggle like/unlike for a post by a user
-     * Example:
-     * POST /api/likes/toggle?userId=1&postId=10
-     */
     @PostMapping("/toggle")
     public ResponseEntity<String> toggleLike(
             @RequestParam Long userId,
@@ -30,11 +25,6 @@ public class LikeController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Get total like count of a post
-     * Example:
-     * GET /api/likes/count/10
-     */
     @GetMapping("/count/{postId}")
     public ResponseEntity<Long> getLikeCount(@PathVariable Long postId) {
 
@@ -42,11 +32,7 @@ public class LikeController {
         return ResponseEntity.ok(count);
     }
 
-    /**
-     * Check if a user liked a post
-     * Example:
-     * GET /api/likes/is-liked?userId=1&postId=10
-     */
+
     @GetMapping("/is-liked")
     public ResponseEntity<Boolean> isLiked(
             @RequestParam Long userId,

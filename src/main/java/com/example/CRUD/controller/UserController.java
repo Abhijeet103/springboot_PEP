@@ -5,7 +5,9 @@ import com.example.CRUD.dto.UserDto;
 import com.example.CRUD.dto.UserResponseDto;
 import com.example.CRUD.entity.User;
 import com.example.CRUD.service.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +26,15 @@ public class UserController {
     }
 
     @PostMapping("")
-    public UserResponseDto createUser(@RequestBody UserDto userDto){
-        return userService.createUser(userDto) ;
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserDto userDto){
+        try{
+            return ResponseEntity.ok(userService.createUser(userDto));
+        } catch (MessagingException e) {
+
+            return ResponseEntity.badRequest().build();
+        }
     }
+
     @GetMapping("/{id}")
     public UserResponseDto getUser(@PathVariable long id){
         return userService.getuser(id) ;
