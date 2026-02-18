@@ -76,9 +76,9 @@ public class PostService {
         }
 
 
-        postRepository.save(post);
+        postRepository.save(oldPost);
 
-        return toDto(post) ;
+        return toDto(oldPost) ;
     }
 
 
