@@ -3,11 +3,14 @@ package com.example.CRUD.controller;
 
 import com.example.CRUD.auth.JwtUtil;
 import com.example.CRUD.dto.LoginRequestDto;
+import com.example.CRUD.dto.UserDto;
 import com.example.CRUD.entity.Token;
 import com.example.CRUD.entity.User;
 import com.example.CRUD.entity.VerficationStatus;
 import com.example.CRUD.repository.TokenRepository;
 import com.example.CRUD.repository.UserRepository;
+import com.example.CRUD.service.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,8 @@ public class AuthController {
 
     @Autowired
     TokenRepository tokenRepository;
+    @Autowired
+    private UserService userService;
 
     public AuthController(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -43,6 +48,16 @@ public class AuthController {
         }
 
         return ResponseEntity.status(401).body("Invalid credentials");
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody UserDto userDto) {
+        try{
+            userService.createUser(userDto);
+            return ResponseEntity.ok("User registered successfully");
+        } catch (MessagingException e) {
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
     }
 
 
