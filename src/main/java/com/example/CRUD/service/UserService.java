@@ -3,7 +3,10 @@ package com.example.CRUD.service;
 
 import com.example.CRUD.dto.UserDto;
 import com.example.CRUD.dto.UserResponseDto;
+import com.example.CRUD.entity.Token;
 import com.example.CRUD.entity.UserInfo;
+import com.example.CRUD.entity.VerficationStatus;
+import com.example.CRUD.repository.TokenRepository;
 import com.example.CRUD.repository.UserInfoRepository;
 import com.example.CRUD.repository.UserRepository;
 import com.example.CRUD.entity.User;
@@ -12,14 +15,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+
 
     private User toEntity(UserDto userDto){
         User user = new User();
@@ -64,8 +73,19 @@ public class UserService {
 
 
         User user   = toEntity(userDto) ;
+        user.getUserInfo().setVerificationStatus(VerficationStatus.ONGOING);
+        Token token = new Token();
+        token.setUser(user);
+        UUID uuid = UUID.randomUUID();
+        token.setToken(uuid.toString());
+
+
+        // send url in email ;
+
+
         userRepository.save(user);
         userInfoRepository.save(user.getUserInfo());
+        tokenRepository.save(token);
 
         return toResponseDto(user);
 
