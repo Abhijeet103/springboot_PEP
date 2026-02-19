@@ -23,6 +23,9 @@ public class PostService {
     @Autowired
     private FileUploadService fileUploadService;
 
+    @Autowired
+    private UserRepository userRepository;
+
 
     private PostResponseDto toDto(Post post){
         String  username = post.getUser().getUsername();
@@ -62,8 +65,9 @@ public class PostService {
 
     }
 
-    public PostResponseDto create(String content , MultipartFile file , User user){
+    public PostResponseDto create(String content , MultipartFile file , String username){
 
+        User user = userRepository.findByUsername(username);
         Post post = new Post();
         post.setContent(content);
         post.setUser(user);
