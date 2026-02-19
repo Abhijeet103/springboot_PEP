@@ -3,6 +3,7 @@ package com.example.CRUD.controller;
 import com.example.CRUD.entity.Comment;
 import com.example.CRUD.service.CommentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/comments")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER' , 'ADMIN')")
 public class CommentController {
 
     private final CommentService commentService;

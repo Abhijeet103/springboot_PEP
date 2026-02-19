@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,7 @@ public class PostController {
     private final JwtUtil jwtUtil;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyRole('USER' , 'ADMIN')")
     public ResponseEntity<PostResponseDto> create(
             @RequestParam("content") String content,
             @RequestParam(value = "file", required = false) MultipartFile file,
@@ -38,6 +40,7 @@ public class PostController {
 
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyRole('USER' ,'ADMIN')")
     public ResponseEntity<PostResponseDto> update(
             @PathVariable Long id,
             @RequestParam(value = "content", required = false) String content,
@@ -54,6 +57,7 @@ public class PostController {
 
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN' , 'UNVERIFIED')")
     public ResponseEntity<List<PostResponseDto>> findAll() {
         return ResponseEntity.ok(postService.findAll());
     }
