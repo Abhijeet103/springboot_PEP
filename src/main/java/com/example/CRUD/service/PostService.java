@@ -6,8 +6,10 @@ import com.example.CRUD.entity.Post;
 import com.example.CRUD.entity.User;
 import com.example.CRUD.repository.PostRepository;
 import com.example.CRUD.repository.UserRepository;
+import com.example.CRUD.service.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,7 +20,8 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
-
+    @Autowired
+    private FileUploadService fileUploadService;
 
 
     private PostResponseDto toDto(Post post){
@@ -59,7 +62,16 @@ public class PostService {
 
     }
 
-    public PostResponseDto create(Post post){
+    public PostResponseDto create(String content , MultipartFile file , User user){
+
+        Post post = new Post();
+        post.setContent(content);
+        post.setUser(user);
+
+        String url = fileUploadService.uploadFile(file);
+        post.setMediaUrl(url);
+
+
         postRepository.save(post);
         return toDto(post) ;
     }
