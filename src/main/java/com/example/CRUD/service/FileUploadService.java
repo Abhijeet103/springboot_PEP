@@ -1,5 +1,6 @@
 package com.example.CRUD.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.http.HttpEntity;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor
 public class FileUploadService {
 
     @Value("${supabase.url}")
@@ -27,11 +29,11 @@ public class FileUploadService {
     @Value("${supabase.bucket}")
     private String bucketName;
 
+
+
+
     private final WebClient webClient;
 
-    public FileUploadService(WebClient webClient) {
-        this.webClient = webClient;
-    }
 
     public String uploadFile(MultipartFile file) {
 
