@@ -44,6 +44,9 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     List<Like> likes  = new ArrayList<>() ;
 
+
+    boolean visible  ;
+
     public void addPost(Post post) {
         posts.add(post);
         post.setUser(this);

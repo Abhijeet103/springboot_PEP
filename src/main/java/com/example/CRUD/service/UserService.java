@@ -75,6 +75,7 @@ public class UserService {
 
 
         User user   = toEntity(userDto) ;
+        user.setVisible(false);
 
         user.getUserInfo().setRole(Role.ROLE_UNVERIFIED);
 
@@ -155,6 +156,12 @@ public class UserService {
         User  user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         userRepository.delete(user);
         return toResponseDto(user);
+    }
+
+
+    public void toggleVisible(String username){
+        User user = userRepository.findByUsername(username) ;
+        user.setVisible(!user.isVisible());
     }
 
 
