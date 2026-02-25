@@ -16,4 +16,6 @@ public interface FollowRepository extends JpaRepository<Follow , Long> {
 
     List<Follow> findByFollowingIdAndFollowStatus(long following_id, FollowStatus followStatus);
 
+    boolean existsByFollowerIdAndFollowingId(Long follower_id, Long following_id);
+
 }
