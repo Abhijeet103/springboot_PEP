@@ -21,7 +21,7 @@ public class FollowService {
     FollowRepository followRepository;
     UserRepository userRepository;
 
-    List<User> getFollowers(String username)
+    public List<User> getFollowers(String username)
     {
         User user = userRepository.findByUsername(username);
         List<Follow> followers = followRepository.findByFollowingIdAndFollowStatus(user.getId() , FollowStatus.FOLLOWING) ;
@@ -37,7 +37,7 @@ public class FollowService {
 
     }
 
-    List<User> getFollowing(String username)
+    public List<User> getFollowing(String username)
     {
         User user = userRepository.findByUsername(username);
         List<Follow> followers = followRepository.findByFollowerIdAndFollowStatus(user.getId() , FollowStatus.FOLLOWING) ;
@@ -52,7 +52,7 @@ public class FollowService {
         return users;
     }
 
-    void toggleFollow(long userId , String username){
+    public void toggleFollow(long userId , String username){
             User follower = userRepository.findByUsername(username);
             User following = userRepository.findById(userId).get();
 
@@ -61,8 +61,6 @@ public class FollowService {
                 followRepository.delete(isfollow.get());
                 return ;
             }
-
-
             Follow follow = new Follow();
             follow.setFollowing(following);
             follow.setFollower(follower);
